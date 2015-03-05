@@ -1,0 +1,73 @@
+public void FromCamera() {
+
+    Log.i("camera", "startCameraActivity()");
+    File file = new File(path);
+    Uri outputFileUri = Uri.fromFile(file);
+    Intent intent = new Intent(
+            android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+    intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+    startActivityForResult(intent, 1);
+
+}
+
+public void FromCard() {
+    Intent i = new Intent(Intent.ACTION_PICK,
+            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+    startActivityForResult(i, 2);
+}
+
+ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    super.onActivityResult(requestCode, resultCode, data);
+
+    if (requestCode == 2 && resultCode == RESULT_OK
+            && null != data) {
+
+        Uri selectedImage = data.getData();
+        String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+        Cursor cursor = getContentResolver().query(selectedImage,
+                filePathColumn, null, null, null);
+        cursor.moveToFirst();
+
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String picturePath = cursor.getString(columnIndex);
+        cursor.close();
+
+        bitmap = BitmapFactory.decodeFile(picturePath);
+        image.setImageBitmap(bitmap);
+
+        if (bitmap != null) {
+            ImageView rotate = (ImageView) findViewById(R.id.rotate);
+
+        }
+
+    } else {
+
+        Log.i("SonaSys", "resultCode: " + resultCode);
+        switch (resultCode) {
+        case 0:
+            Log.i("SonaSys", "User cancelled");
+            break;
+        case -1:
+            onPhotoTaken();
+            break;
+
+        }
+
+    }
+
+}
+
+protected void onPhotoTaken() {
+    // Log message
+    Log.i("SonaSys", "onPhotoTaken");
+    taken = true;
+    imgCapFlag = true;
+    BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inSampleSize = 4;
+    bitmap = BitmapFactory.decodeFile(path, options);
+    image.setImageBitmap(bitmap);
+
+
+}
