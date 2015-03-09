@@ -1,73 +1,145 @@
-public void FromCamera() {
+ private File getTempFile(Context context)
+    {
+        //it will return /sdcard/image.tmp
+        final File path = new File(Environment.getExternalStorageDirectory(), context.getPackageName());
+        if (!path.exists())
+        {
+            path.mkdir();
+        }
+        return new File(path, "image.tmp");
+    }
 
-    Log.i("camera", "startCameraActivity()");
-    File file = new File(path);
-    Uri outputFileUri = Uri.fromFile(file);
-    Intent intent = new Intent(
-            android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-    intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-    startActivityForResult(intent, 1);
 
-}
+    View.OnClickListener uploadFromGalleryClicked = new View.OnClickListener()
+    
+    {
+        
 
-public void FromCard() {
-    Intent i = new Intent(Intent.ACTION_PICK,
-            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-    startActivityForResult(i, 2);
-}
+        @Override
+        public void onClick(View v)
+        {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"),2); 
+        }
 
- protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+       
+    };
 
-    super.onActivityResult(requestCode, resultCode, data);
+    View.OnClickListener uploadFromCameraClicked = new View.OnClickListener()
 
-    if (requestCode == 2 && resultCode == RESULT_OK
-            && null != data) {
+    {
 
-        Uri selectedImage = data.getData();
-        String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
-        Cursor cursor = getContentResolver().query(selectedImage,
-                filePathColumn, null, null, null);
-        cursor.moveToFirst();
+        @Override
+        public void onClick(View v)
 
-        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        String picturePath = cursor.getString(columnIndex);
-        cursor.close();
+        {
+            final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getTempFile(UserProfileActivity.this)) );
+            startActivityForResult(intent, 1);
+        }
+    };
+    
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
 
-        bitmap = BitmapFactory.decodeFile(picturePath);
-        image.setImageBitmap(bitmap);
+        super.onActivityResult(requestCode, resultCode, data);
 
-        if (bitmap != null) {
-            ImageView rotate = (ImageView) findViewById(R.id.rotate);
+        if (requestCode == 2 && resultCode == RESULT_OK
+                && null != data)
+        {
+
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            Bitmap srcBmp = BitmapFactory.decodeFile(picturePath);
+            Bitmap dstBmp;
+            if (srcBmp.getWidth() >= srcBmp.getHeight())
+            {
+
+                dstBmp = Bitmap.createBitmap(
+                        srcBmp,
+                        srcBmp.getWidth() / 2 - srcBmp.getHeight() / 2,
+                        0,
+                        srcBmp.getHeight(),
+                        srcBmp.getHeight()
+                );
+
+            }
+            else
+            {
+
+                dstBmp = Bitmap.createBitmap(
+                        srcBmp,
+                        0,
+                        srcBmp.getHeight() / 2 - srcBmp.getWidth() / 2,
+                        srcBmp.getWidth(),
+                        srcBmp.getWidth()
+                );
+            }
+
+            userImageView.setImageBitmap(dstBmp);
+
+
+        }
+        else if (requestCode == 1)
+        {
+            final File file = getTempFile(this);
+            try
+            {
+
+                Bitmap srcBmp = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.fromFile(file));
+                //Bitmap srcBmp = BitmapFactory.decodeFile(picturePath);
+                Bitmap dstBmp;
+                if (srcBmp.getWidth() >= srcBmp.getHeight())
+                {
+
+                    dstBmp = Bitmap.createBitmap(
+                            srcBmp,
+                            srcBmp.getWidth() / 2 - srcBmp.getHeight() / 2,
+                            0,
+                            srcBmp.getHeight(),
+                            srcBmp.getHeight()
+                    );
+
+                }
+                else
+                {
+
+                    dstBmp = Bitmap.createBitmap(
+                            srcBmp,
+                            0,
+                            srcBmp.getHeight() / 2 - srcBmp.getWidth() / 2,
+                            srcBmp.getWidth(),
+                            srcBmp.getWidth()
+                    );
+                }
+
+                userImageView.setImageBitmap(dstBmp);
+
+                // do whatever you want with the bitmap (Resize, Rename, Add To Gallery, etc)
+            }
+            catch (FileNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
 
         }
 
-    } else {
-
-        Log.i("SonaSys", "resultCode: " + resultCode);
-        switch (resultCode) {
-        case 0:
-            Log.i("SonaSys", "User cancelled");
-            break;
-        case -1:
-            onPhotoTaken();
-            break;
-
-        }
 
     }
 
-}
-
-protected void onPhotoTaken() {
-    // Log message
-    Log.i("SonaSys", "onPhotoTaken");
-    taken = true;
-    imgCapFlag = true;
-    BitmapFactory.Options options = new BitmapFactory.Options();
-    options.inSampleSize = 4;
-    bitmap = BitmapFactory.decodeFile(path, options);
-    image.setImageBitmap(bitmap);
-
-
-}
