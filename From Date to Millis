@@ -1,0 +1,10 @@
+ SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy hh:mm:ss");
+        try
+        {
+            Date mDate = sdf.parse(formattedDate);
+            timeInMilliseconds = mDate.getTime();
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
