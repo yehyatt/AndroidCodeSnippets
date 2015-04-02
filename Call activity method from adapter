@@ -1,0 +1,22 @@
+In the adapter:
+
+Add a new Field : private Context mContext;
+
+In the adapter Constructor add the following code :
+
+public AdapterName(......,Context context){
+...your code.
+this.mContext=context;
+}
+In the getView(...) of Adapter :
+
+Button btn=(Button)convertView.findViewById(yourButtonId);
+btn.setOnClickListener(new Button.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            if(mContext instanceof YourActivityName){
+                ((YourActivityName)mContext).yourDesiredMethod();
+            }
+        }
+    });
