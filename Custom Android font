@@ -1,0 +1,6 @@
+Add font to assets folder app/src/main/assets
+
+in the class:
+ TextView txt = (TextView) findViewById(R.id.textViewhh);
+ Typeface font = Typeface.createFromAsset(getAssets(), "karate.ttf");
+ txt.setTypeface(font);
