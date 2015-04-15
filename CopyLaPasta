@@ -1,0 +1,33 @@
+Template Copy La Pasta
+
+new image button
+ImageButton ?ImageButton;
+ImageButton = (ImageButton) findViewById(R.id.?);
+
+new button
+Button ?Button;
+Button = (Button) findViewById(R.id.?);
+
+
+ ImageButton.setOnClickListener(on?Clicked);
+ Button.setOnClickListener(on?Clicked);
+
+ View.OnClickListener onClicked = new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View v)
+        {
+            Intent intent = new Intent(thisActivity.this, nextActivity.class);
+            intent.putExtra(“extra_id", extraIdValue);
+            startActivity(intent);
+        }
+    };
+
+@Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+       super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_?);
+    }
+
+code="[/A-Z/][/A-Z/]" iso="[/\w/][/\w/][/\w/]"
