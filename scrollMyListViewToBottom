@@ -1,0 +1,9 @@
+private void scrollMyListViewToBottom() {
+    myListView.post(new Runnable() {
+        @Override
+        public void run() {
+            // Select the last row so it will scroll into view...
+            myListView.setSelection(myListAdapter.getCount() - 1);
+        }
+    });
+}
