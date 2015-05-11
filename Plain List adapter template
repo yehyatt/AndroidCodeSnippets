@@ -1,0 +1,65 @@
+public class daListAdapter extends BaseAdapter
+{
+
+
+    private Activity activity;
+    private daParentActivity allContactsActivity;
+    private static LayoutInflater inflater = null;
+    List<String> daList;
+
+    RelativeLayout mainCellLayout;
+    ImageView someImageView;
+    TextView someTextView;
+    TextView someOtherTextView;
+
+
+
+
+    public void setActivity(daParentActivity activity)
+    {
+        this.daParentActivity = activity;
+    }
+
+    public daListAdapter(Activity a, List<String> allContacts)
+    {
+        ContactsList = allContacts;
+        activity = a;
+        inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public int getCount()
+    {
+        return ContactsList.size();
+    }
+
+    public Object getItem(int position)
+    {
+        return position;
+    }
+
+    public long getItemId(int position)
+    {
+        return position;
+    }
+
+
+
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
+        View vi = convertView;
+        if (convertView == null)
+        {
+            vi = inflater.inflate(R.layout.list_item_new_chat_select_user, null);
+        }
+
+        mainCellLayout = (RelativeLayout) vi.findViewById(R.id.mainNewChatCell);
+        userImageView = (ImageView) vi.findViewById(R.id.studentImageView);
+
+        userStatusTextView = (TextView) vi.findViewById(R.id.chatStatusTextView);
+
+        userNameTextView = (TextView) vi.findViewById(R.id.studentNameTextView);
+        userNameTextView.setText(ContactsList.get(position));
+
+        mainCellLayout.setTag(position);
+        return vi;
+    }
