@@ -1,7 +1,6 @@
 public class daListAdapter extends BaseAdapter
 {
 
-
     private Activity activity;
     private daParentActivity allContactsActivity;
     private static LayoutInflater inflater = null;
