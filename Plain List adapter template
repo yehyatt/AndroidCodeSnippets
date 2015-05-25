@@ -1,34 +1,27 @@
 public class daListAdapter extends BaseAdapter
 {
 
+
     private Activity activity;
-    private daParentActivity allContactsActivity;
+    private ParentActivity parentActivity;
     private static LayoutInflater inflater = null;
-    List<String> daList;
+    List<String> itemsList;
 
-    RelativeLayout mainCellLayout;
-    ImageView someImageView;
-    TextView someTextView;
-    TextView someOtherTextView;
-
-
-
-
-    public void setActivity(daParentActivity activity)
+    public void setActivity(ParentActivity activity)
     {
-        this.daParentActivity = activity;
+        this.parentActivity = activity;
     }
 
-    public daListAdapter(Activity a, List<String> allContacts)
+    public daListAdapter(Activity a, List<String> ItemsList)
     {
-        ContactsList = allContacts;
+        itemsList = ItemsList;
         activity = a;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public int getCount()
     {
-        return ContactsList.size();
+        return itemsList.size();
     }
 
     public Object getItem(int position)
@@ -42,23 +35,13 @@ public class daListAdapter extends BaseAdapter
     }
 
 
-
     public View getView(int position, View convertView, ViewGroup parent)
     {
         View vi = convertView;
         if (convertView == null)
         {
-            vi = inflater.inflate(R.layout.list_item_new_chat_select_user, null);
+            vi = inflater.inflate(R.layout.list_item_, null);
         }
-
-        mainCellLayout = (RelativeLayout) vi.findViewById(R.id.mainNewChatCell);
-        userImageView = (ImageView) vi.findViewById(R.id.studentImageView);
-
-        userStatusTextView = (TextView) vi.findViewById(R.id.chatStatusTextView);
-
-        userNameTextView = (TextView) vi.findViewById(R.id.studentNameTextView);
-        userNameTextView.setText(ContactsList.get(position));
-
-        mainCellLayout.setTag(position);
         return vi;
     }
+}
