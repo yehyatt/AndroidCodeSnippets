@@ -1,0 +1,123 @@
+package com.edaura.edauramobile.WebAPI;
+
+import android.app.Activity;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
+
+/**
+ * Created by yahyatt on 6/2/15.
+ */
+public class WebAPICalls
+{
+    public void LoginAPI(final String UserName, final String Password, final Activity activity) throws IOException
+    {
+        //final ProgressDialog progress = ProgressDialog.show(activity, "dialog title", "dialog message", true);
+        Log.d("helloddokd", "loginapi called");
+        new JSONAsyncTask().execute();
+
+    }
+
+    class JSONAsyncTask extends AsyncTask<String, Void, Boolean>
+    {
+
+
+        @Override
+        protected void onPreExecute()
+        {
+            super.onPreExecute();
+            Log.d("helloddokd", "onPreExecute called");
+
+        }
+
+        @Override
+        protected Boolean doInBackground(String... urls)
+        {
+            try
+            {
+                Log.d("helloddokd", "doInBackground called");
+
+                URL url = new URL("http://EdauraStg.cloudapp.net/Member/loginUser?");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(10000);
+                conn.setConnectTimeout(15000);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+                JSONObject jsonurl = new JSONObject();
+                try
+                {
+                    jsonurl.put("userName", "t1@edaura.com");
+                    jsonurl.put("userPassword", "t");
+                    jsonurl.put("loginType", "0");
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+
+//                Uri.Builder builder = new Uri.Builder();
+//                builder.appendQueryParameter("userName", "t1@edaura.com");
+//                builder.appendQueryParameter("userPassword", "t");
+//                builder.appendQueryParameter("loginType", "0");
+                Uri.Builder builder = new Uri.Builder()
+                        .appendQueryParameter("token", "nkoTk3MxXQEwdjQTlzjnKAsdbo1gsW3GCqKj+mAkLqxmEmpm892OGCX2Z1u7/xmZX1JgSdgQyIBdbM1Ey4BRFQ==");
+                Log.d("helloddokd", "" + jsonurl.toString());
+
+                String query = builder.build().getEncodedQuery();
+                Log.d("helloddokd", "query " + query);
+
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                writer.write(query);
+                writer.flush();
+                writer.close();
+                os.close();
+
+                conn.connect();
+                int responseCode = conn.getResponseCode();
+
+                if (responseCode == HttpsURLConnection.HTTP_OK)
+                {
+                    String line;
+                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    while ((line = br.readLine()) != null)
+                    {
+                        Log.d("helloddokd", "" + line);
+                    }
+                }
+                else
+                {
+
+                }
+                return true;
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+        protected void onPostExecute(Boolean result)
+        {
+
+        }
+
+    }
+
+}
