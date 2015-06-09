@@ -1,0 +1,28 @@
+easy. create interface class.
+
+public interface AsyncResponse {
+    void processFinish(String output);
+}
+in your Async class, you need to declare it (interface : AsyncResponse):
+
+public class MyAsyncTask extends AsyncTask{
+public AsyncResponse delegate=null;
+
+   @Override
+   protected void onPostExecute(String result) {
+      delegate.processFinish(result);
+   }
+final step: in your main Activity you need to implements interface you created earlier AsyncResponse.
+
+public class MainActivity implements AsyncResponse{
+   MyAsyncTask asyncTask =new MyAsyncTask();
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+     asyncTask.delegate = this;
+    }
+
+
+   void processFinish(String output){
+     //this you will received result fired from async class of onPostExecute(result) method.
+   }
+}
