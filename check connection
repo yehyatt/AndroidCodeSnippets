@@ -1,0 +1,11 @@
+ConnectivityManager cm =(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&activeNetwork.isConnectedOrConnecting();
+        if(isConnected)
+        {
+            doNetworkStuff();
+        }
+        else
+        {
+            ShowAlert("Failed to connect", "Check your connection");
+        }
