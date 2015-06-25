@@ -1,0 +1,2 @@
+ExampleFragment fragment = (ExampleFragment) getFragmentManager().findFragmentById(R.id.example_fragment);
+fragment.<specific_function_name>(); 
