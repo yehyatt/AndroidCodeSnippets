@@ -1,0 +1,23 @@
+ RequestQueue queue = Volley.newRequestQueue(this);
+ CacheRequest cacheRequest = new CacheRequest(this,Request.Method.GET, URL, new Response.Listener<NetworkResponse>()
+                        {
+                            @Override
+                            public void onResponse(NetworkResponse response)
+                            {
+                            
+                                    final int responseCode = response.statusCode;
+
+                                    final String output = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+                                    
+                            }
+                        }, new Response.ErrorListener()
+                        {
+                            @Override
+                            public void onErrorResponse(VolleyError error)
+                            {
+                               
+                                Toast.makeText(this, "onErrorResponse:\n\n" + error.toString(), Toast.LENGTH_SHORT).show();
+                            }
+
+                        });
+                        queue.add(cacheRequest);
