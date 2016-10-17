@@ -1,0 +1,1 @@
+        mTabHost.getTabWidget().setDividerDrawable(null);
