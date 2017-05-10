@@ -1,0 +1,11 @@
+ private static String getCurl(String url, String ProfileId, String token , String RequestMethod , String payload)
+    {
+        if(RequestMethod.equals("GET"))
+        {
+            return "curl -X " + RequestMethod + " '" + url + "'  " + " -H '" + token + "'  " + "-H 'content-type: application/json'  " + " -H 'ProfileId: " + ProfileId+"'" ;
+        }
+        else
+        {
+            return "curl -X " + RequestMethod + "  '" + url + " ' " + " -H '" + token + "'  " + "-H 'content-type: application/json'  " + " -H 'ProfileId: " + ProfileId + "' " + " -d '" + payload+"'";
+        }
+    }
