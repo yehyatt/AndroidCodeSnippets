@@ -1,0 +1,14 @@
+1. Pass fragment in add adapter:
+AddTripFragment mFragment;
+public ExpandableAddTripAdapter(Activity context, List<String> destinationNames, Map<String, List<String>> laptopCollections, AddTripFragment myFragment)
+    {
+        mFragment = myFragment;
+        this.context = context;
+        this.laptopCollections = laptopCollections;
+        this.DestinationNames = destinationNames;
+    }
+    
+    
+    then call the function:
+    
+    mFragment.setusers();
